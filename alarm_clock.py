@@ -11,13 +11,14 @@ import configparser
 import winsound
 from twitter_scraper import get_tweets
 
-def main(): 
+if __name__=='__main__':
+    #設定ファイルを読み込み
     config_ini = configparser.ConfigParser()
     config_ini.read("config.ini",encoding="utf-8")
     
-    #打ち上げ時刻を設定    
+    #打ち上げ時刻を設定
     t_launch = datetime.datetime.strptime(config_ini["LAUNCH"]["Launch_Time"],"%Y-%m-%d %H:%M:%S")
-     
+    
     t_start = datetime.datetime.now()
     while t_launch-datetime.datetime.now()>datetime.timedelta(minutes=10):
         td = t_launch-datetime.datetime.now()
@@ -47,6 +48,3 @@ def main():
         winsound.PlaySound("aarm_clock.wav", winsound.SND_FILENAME|winsound.SND_PURGE)
     else:
         print("打ち上げは延期になりました")
-       
-#メイン関数実行
-main()
