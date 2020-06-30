@@ -7,16 +7,19 @@ Created on Thu May 28 14:31:50 2020
 
 import datetime
 import time
+import configparser
 import winsound
 from twitter_scraper import get_tweets
+
+if __name__=='__main__':
+    #設定ファイルを読み込み
+    config_ini = configparser.ConfigParser()
+    config_ini.read("config.ini",encoding="utf-8")
     
-def main():
-    #打ち上げ時刻を設定    
-    t_launch = datetime.datetime(2020, 5, 31, 4, 22, 0)
-     
-    t_start = datetime.datetime.now() #本番用コード
-    #t_start = datetime.datetime(2020, 5, 28, 5, 40, 0) #テスト用ダミー
+    #打ち上げ時刻を設定
+    t_launch = datetime.datetime.strptime(config_ini["LAUNCH"]["Launch_Time"],"%Y-%m-%d %H:%M:%S")
     
+    t_start = datetime.datetime.now()
     while t_launch-datetime.datetime.now()>datetime.timedelta(minutes=10):
         td = t_launch-datetime.datetime.now()
         print("T-",td)
@@ -24,7 +27,7 @@ def main():
 
     #GO/NOGOチェック
     flg_nogo = False
-    for tweet in get_tweets('SpaceflightNow', pages=2):
+    for tweet in get_tweets(config_ini["TWITTER"]["Target_Twitter_User"], pages=2):
         if tweet['isRetweet'] == True: #リツイートは見ない
             continue
         
@@ -45,6 +48,3 @@ def main():
         winsound.PlaySound("aarm_clock.wav", winsound.SND_FILENAME|winsound.SND_PURGE)
     else:
         print("打ち上げは延期になりました")
-       
-#メイン関数実行
-main()
