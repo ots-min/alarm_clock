@@ -18,9 +18,10 @@ if __name__=='__main__':
     
     #打ち上げ時刻を設定
     t_launch = datetime.datetime.strptime(config_ini["LAUNCH"]["Launch_Time"],"%Y-%m-%d %H:%M:%S")
+    margin = config_ini["LAUNCH"]["Wake_Up_Minutes"]
     
     t_start = datetime.datetime.now()
-    while t_launch-datetime.datetime.now()>datetime.timedelta(minutes=10):
+    while t_launch-datetime.datetime.now()>datetime.timedelta(minutes=int(margin)):
         td = t_launch-datetime.datetime.now()
         print("T-",td)
         time.sleep(1)
@@ -37,12 +38,12 @@ if __name__=='__main__':
         print(tweet['text'])
         print("-----------------------------------\n")
     
-        if tweet['text'].startswith('SCRUB.'):
+        if tweet['text'].startswith(config_ini["TWITTER"]["Keyword"]):
             flg_nogo = True
 
     if flg_nogo == False:        
         winsound.PlaySound("alarm_clock.wav", winsound.SND_FILENAME|winsound.SND_LOOP|winsound.SND_ASYNC)
-        print("打ち上げ10分前")
+        print("打ち上げ"+margin+"分前")
         print("アラームを止めるためにキー入力してください")
         input()
         winsound.PlaySound("aarm_clock.wav", winsound.SND_FILENAME|winsound.SND_PURGE)

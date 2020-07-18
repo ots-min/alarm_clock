@@ -1,3 +1,11 @@
 #alarm audio file
 
 alarm_clock.wav
+
+#PyInstaller files
+
+alarm_clock.exe
+alarm_clock.spec
+dist/
+__pycache__/
+build/
